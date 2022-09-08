@@ -2,8 +2,17 @@
 
 public class RomanNumeralsToNumbers
 {
-    public bool IsPrime(int candidate)
+
+    public string ConvertRomanNum(string? inRomanNum)
     {
-        throw new NotImplementedException("Please create a test first.");
+        if (inRomanNum != null && inRomanNum != "")
+        {
+            return "";
+        }
+        else
+        {
+            return $"Can't convert \"{inRomanNum}\" to Numbers.";
+        }
     }
 }
+
