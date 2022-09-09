@@ -1,4 +1,6 @@
-﻿namespace RomanNumerals.Kata;
+﻿using System.Linq;
+
+namespace RomanNumerals.Kata;
 
 public class RomanNumeralsToNumbers
 {
@@ -20,38 +22,56 @@ public class RomanNumeralsToNumbers
         return $"Can't convert \"{inRomanNum}\" to Numbers.";
     }
 
-    private int MatchRomanToDict(char romanToMatchDict)
+    private int ValidateAndSumAllRomanNum(string inRomanNum)
     {
-        foreach (var item in RomanDict)
-        {
-            if (romanToMatchDict == item.Key)
-                return item.Value;
-        }
-
-        return NotExist;
-    }
-
-    private bool ValidateRomanNumerals(string inRomanNum)
-    {
+        var totalNum = 0;
         inRomanNum = inRomanNum.ToUpper();
-        char[] romanNumArr = inRomanNum.ToCharArray();
 
         for (int i = 0; i < inRomanNum.Length; i++)
         {
-            if (MatchRomanToDict(inRomanNum[i]) == NotExist)
-                return false;
+            var romanToNum = RomanDict.Where(romanDictItem => romanDictItem.Key.Equals(inRomanNum[i])).Select(romanDictItem => romanDictItem.Value);
+            if (romanToNum.Count() == NotExist)
+                return NotExist;
+            else
+                romanToNum.ToList().ForEach(romanDictItem => totalNum += romanDictItem);
         }
 
-        return true;
+        return totalNum;
+    }
+
+    private int CoreConvertor(string inRomanNum)
+    {
+        var totalNum = ValidateAndSumAllRomanNum(inRomanNum);
+
+        if (totalNum != NotExist)
+        {
+            var convertedNum = totalNum;
+
+            if (inRomanNum.Contains("IV") || inRomanNum.Contains("IX"))
+                convertedNum -= 2;
+
+            if (inRomanNum.Contains("XL") || inRomanNum.Contains("XC"))
+                convertedNum -= 20;
+
+            if (inRomanNum.Contains("CD") || inRomanNum.Contains("CM"))
+                convertedNum -= 200;
+
+            return convertedNum;
+        }
+        else
+            return NotExist;
+        
     }
 
     public string ConvertRomanNum(string? inRomanNum)
     {
-        if (inRomanNum != null && inRomanNum != "")
+        if (!String.IsNullOrEmpty(inRomanNum))
         {
-            if(!ValidateRomanNumerals(inRomanNum))
+            var convertedNum = CoreConvertor(inRomanNum);
+            if (convertedNum == NotExist)
                 return ErrorMsg(inRomanNum);
-            return "Valid Roman Numeral.";
+            else
+                return convertedNum.ToString();
         }
         else
         {

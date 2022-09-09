@@ -32,7 +32,7 @@ public class RomanNumeralsToNumbersTests
     [Test]
     public void Convert_Mixed_Letter_Cases_Should_Return_A_Number()
     {
-        RomanNumeralsToNumbers.ConvertRomanNum("MDcCViI").Should().Be("Valid Roman Numeral.");
+        RomanNumeralsToNumbers.ConvertRomanNum("MDcCViI").Should().Be("1707");
     }
 
     [Test]
